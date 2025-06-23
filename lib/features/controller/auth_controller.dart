@@ -12,7 +12,7 @@ class AuthController extends StateNotifier<bool> {
     // Replace with real auth logic
   }
 
-  void signup(String email, String password) {
-    print('Signing up with $email and $password');
+  void signup() {
+ //   print('Signing up with $email and $password');
   }
 }

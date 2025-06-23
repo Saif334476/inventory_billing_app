@@ -1,23 +1,25 @@
-import 'package:inventory_billing_app/features/ui/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'app_theme.dart';
 
+import 'features/ui/login_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'My Auth App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginScreen(), // or SignupScreen()
+      debugShowCheckedModeBanner: false,
+      title: 'SuperStore',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system, // You can change this to ThemeMode.dark/light
+      home: const LoginScreen(),
     );
   }
 }
