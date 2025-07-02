@@ -9,6 +9,7 @@ class SignupScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authControllerProvider.notifier);
     final size = MediaQuery.of(context).size;
     final isDesktop = size.width >= 700;
 
@@ -40,7 +41,11 @@ class SignupScreen extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.storefront, size: 60, color: colorScheme.primary),
+                Image.asset(
+                  "assets/invenza.png",
+                  height: 150,
+                  width: 150,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   "Create your account",
@@ -50,24 +55,40 @@ class SignupScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const CustomTextField(label: "Full Name", isPassword: false),
+                CustomTextField(
+                  label: "Email",
+                  isPassword: false,
+                  onChanged: authController.updateEmail,
+                ),
                 const SizedBox(height: 16),
-                const CustomTextField(label: "Email", isPassword: false),
+                CustomTextField(
+                  label: "Password",
+                  isPassword: true,
+                  onChanged: authController.updatePassword,
+                ),
                 const SizedBox(height: 16),
-                const CustomTextField(label: "Password", isPassword: true),
+                CustomTextField(
+                  label: "Confirm Password",
+                  isPassword: true,
+                  onChanged: authController.updateConfirmPassword,
+                ),
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                    ).copyWith(
+                      backgroundColor:
+                          MaterialStatePropertyAll(colorScheme.primary),
+                      foregroundColor:
+                          MaterialStatePropertyAll(colorScheme.onPrimary),
                     ),
                     onPressed: () {
-                      ref.read(authControllerProvider.notifier).signup();
+                      authController.signup();
                     },
                     child: const Text(
                       "Sign Up",
@@ -76,21 +97,34 @@ class SignupScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  "Or sign up with",
-                  style: theme.textTheme.bodyMedium,
+                Row(
+                  children: [
+                    const Expanded(
+                      child: Divider(thickness: 1),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "OR",
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Divider(thickness: 1),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _socialIcon(Icon(FontAwesomeIcons.google, size: 24),
-                         theme),
+                    InkWell(
+                      onTap: (){
+                        ref.read(authControllerProvider.notifier).signInWithGoogle();
+                      },
+                        child: _socialIcon(
+                            const Icon(FontAwesomeIcons.google, size: 24), theme)),
                     const SizedBox(width: 16),
-                    _socialIcon(Icon(FontAwesomeIcons.facebook, size: 24),
-                      theme),
-                    const SizedBox(width: 16),
-                    _socialIcon(  Icon(FontAwesomeIcons.apple, size: 24),  theme),
+                    _socialIcon(const Icon(FontAwesomeIcons.apple, size: 24), theme),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -110,16 +144,14 @@ class SignupScreen extends ConsumerWidget {
 
   Widget _socialIcon(Icon icon, ThemeData theme) {
     return InkWell(
-      onTap: () {
-        // Add your social login logic here
-      },
+      onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(color: theme.dividerColor),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: icon
+        child: icon,
       ),
     );
   }
